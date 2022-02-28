@@ -1,0 +1,33 @@
+.center{
+    margin: auto;
+    width: 60%;
+}
+
+.menu{
+    font-size: large;
+    background-color: antiquewhite;
+}
+
+#picture {
+    position: fixed;
+    right: 1%;
+    top: 10%;
+    width: 8em;
+    margin-top: -2.5em;
+}
+
+.picture{
+    height: 120%;
+    width: 120%;
+}
+
+.image{
+    float:right;
+    width:70px;
+    height:70px;
+}
+
+#shedule{
+    margin: auto;
+    width: 80%;
+}
