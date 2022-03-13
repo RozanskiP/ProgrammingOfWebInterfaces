@@ -39,11 +39,20 @@
         >
           Cofnij ostatnio usuniety element
         </button>
-        <div id="search-autocomplete" class="input-group rounded center70">
-          <input type="search" id="form1" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+        
+        <div class="input-group mb-3 center100">
+          <input id="search" type="text" class="form-control" aria-label="Text input with checkbox">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <input id="search-with-case-sensitive" placeholder="Case-Sensitive" type="checkbox" aria-label="Checkbox for following text input">
+              <label class="form-check-label" for="autoSizingCheck2">
+                Case Sensitive
+              </label>
+            </div>
+          </div>
         </div>
+        
       </div>
-
       
       <div class="row justify-content-center center100">
         <ul id="list" class="list-group col-8"></ul>
