@@ -19,6 +19,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
   <body class="body">
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <p>Are you sure to delete this task?</p>
+        <div>
+          <button class="btn btn-success" type="button" id="Confirm">
+            Confirm
+          </button>
+          <button class="btn btn-danger" type="button" id="Close">Close</button>
+        </div>
+      </div>
+    </div>
+
     <div class="container center70">
       <h2 class="text-center">ToDo List</h2>
       <div class="center70">
@@ -39,21 +51,30 @@
         >
           Cofnij ostatnio usuniety element
         </button>
-        
+
         <div class="input-group mb-3 center100">
-          <input id="search" type="text" class="form-control" aria-label="Text input with checkbox">
+          <input
+            id="search"
+            type="text"
+            class="form-control"
+            aria-label="Text input with checkbox"
+          />
           <div class="input-group-prepend">
             <div class="input-group-text">
-              <input id="search-with-case-sensitive" placeholder="Case-Sensitive" type="checkbox" aria-label="Checkbox for following text input">
+              <input
+                id="search-with-case-sensitive"
+                placeholder="Case-Sensitive"
+                type="checkbox"
+                aria-label="Checkbox for following text input"
+              />
               <label class="form-check-label" for="autoSizingCheck2">
                 Case Sensitive
               </label>
             </div>
           </div>
         </div>
-        
       </div>
-      
+
       <div class="row justify-content-center center100">
         <ul id="list" class="list-group col-8"></ul>
       </div>

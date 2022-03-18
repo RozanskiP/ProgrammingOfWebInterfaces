@@ -13,16 +13,43 @@ class Element {
 }
 
 let list = [
-            new Element(1,'one',null,true),
-            new Element(2,'two',null,true),
-            new Element(3,'thrEe',null,true),
-            new Element(4,'four',null,true)
-          ];
+  new Element(1, "one", null, true),
+  new Element(2, "two", null, true),
+  new Element(3, "thrEe", null, true),
+  new Element(4, "four", null, true),
+];
 let bin;
 
+// zapisanie eventu do id (ktore todo) aby po nacisnieciu w modalu obslozyc to
+let eventToModal;
+
 // po zaladowaniu dokumentu narysuj przykladowa liste
-$(document).ready(function() {
+$(document).ready(function () {
   draw();
+});
+
+// wylacz modal jesli kliknie sie poza modalem
+var modal = document.getElementById("myModal");
+window.onclick = function (event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+};
+
+// na close zamknij modala
+document.getElementById("Close").addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+document.getElementById("Confirm").addEventListener("click", () => {
+  // id zostaje automatycznie przeksztalcony na Number przy ==
+  bin = list.find((el) => el.id == eventToModal.target.id);
+  const index = list.indexOf(bin);
+  if (index > -1) {
+    list.splice(index, 1);
+  }
+  $("#" + eventToModal.target.id).remove();
+  modal.style.display = "none";
 });
 
 // funkcja dodajaca nowy element
@@ -36,7 +63,7 @@ const addNewElem = () => {
     list.push(elem);
 
     let newElem = document.createElement("li");
-    newElem.className = "list-group-item list-group-item-primary";
+    newElem.className = "list-group-item list-group-item-primary d-flex justify-content-between mb-2";
     newElem.innerHTML = text;
     listInHtml.appendChild(newElem);
 
@@ -60,7 +87,7 @@ const draw = (shouldChangeList = false, newList = []) => {
 
   let copyOfList = list;
 
-  if(shouldChangeList){
+  if (shouldChangeList) {
     copyOfList = newList;
   }
 
@@ -69,37 +96,27 @@ const draw = (shouldChangeList = false, newList = []) => {
     newElem.innerHTML = copyOfList[i].text;
     newElem.id = copyOfList[i].id;
     newElem.className = copyOfList[i].click
-      ? "list-group-item list-group-item-primary"
-      : "list-group-item list-group-item-secondary";
+      ? "list-group-item list-group-item-primary d-flex justify-content-between mb-2"
+      : "list-group-item list-group-item-secondary d-flex justify-content-between mb-2";
     newElem.style = copyOfList[i].click
       ? "display: inline-block"
       : "text-decoration: line-through";
 
     if (!copyOfList[i].click) {
-      newElem.innerHTML += copyOfList[i].data;
+      let dateDiv = document.createElement("div");
+      dateDiv.innerHTML += copyOfList[i].data;
+      dateDiv.style = "display: inline-block";
+      newElem.appendChild(dateDiv);
     }
     listInHtml.appendChild(newElem);
-
-    // div do prawej
-    // let div = document.createElement("p");
-    // div.className = "float-right";
-    // newElem.appendChild(div);
 
     let button = document.createElement("button");
     button.innerHTML = "X";
     button.className = "btn btn-warning";
     button.id = copyOfList[i].id;
     button.addEventListener("click", function (event) {
-      var del = confirm("Are you sure to delete this todo?");
-      if (del) {
-        // id zostaje automatycznie przeksztalcony na Number przy ==
-        bin = copyOfList.find((el) => el.id == event.target.id);
-        const index = copyOfList.indexOf(bin);
-        if (index > -1) {
-          copyOfList.splice(index, 1);
-        }
-        $("#" + event.target.id).remove();
-      }
+      modal.style.display = "block";
+      eventToModal = event;
     });
     newElem.appendChild(button);
   }
@@ -113,7 +130,7 @@ listOfToDos.addEventListener(
     if (event.target.tagName === "LI") {
       let elem = list.find((li) => li.id === Number(event.target.id));
       if (
-        event.target.className === "list-group-item list-group-item-primary"
+        event.target.className === "list-group-item list-group-item-primary d-flex justify-content-between mb-2"
       ) {
         let now = new Date();
         let date =
@@ -155,32 +172,33 @@ search.addEventListener("keyup", function () {
   searching();
 });
 // event na zmiane checkboxa
-const searchInChangeCheckbox = document.getElementById("search-with-case-sensitive");
+const searchInChangeCheckbox = document.getElementById(
+  "search-with-case-sensitive"
+);
 searchInChangeCheckbox.addEventListener("change", function () {
   searching();
 });
 
 const searching = () => {
   let filter = search.value;
-  if(search.value !== ""){
+  if (search.value !== "") {
     let copyOfList = [];
-    if(!document.getElementById("search-with-case-sensitive").checked){
+    if (!document.getElementById("search-with-case-sensitive").checked) {
       filter = filter.toLowerCase();
-      for(let i = 0; i < list.length; ++i){
-        if(list[i].text.toLowerCase().indexOf(filter) > -1){
+      for (let i = 0; i < list.length; ++i) {
+        if (list[i].text.toLowerCase().indexOf(filter) > -1) {
           copyOfList.push(list[i]);
         }
       }
-    }else{
-      for(let i = 0; i < list.length; ++i){
-        if(list[i].text.indexOf(filter) > -1){
+    } else {
+      for (let i = 0; i < list.length; ++i) {
+        if (list[i].text.indexOf(filter) > -1) {
           copyOfList.push(list[i]);
         }
       }
     }
     draw(true, copyOfList);
-  }else{
+  } else {
     draw();
   }
-}
-
+};
