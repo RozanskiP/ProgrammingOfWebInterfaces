@@ -1,23 +1,29 @@
 import React from "react";
-import { NavLink, Routes, Route } from "react-router-dom";
-import ListOfGroup from "./Group/ListOfGroup";
-import AddGroup from "./Group/AddGroup";
+import { Card, Container } from "react-bootstrap";
 
-const Group = () => {
-  return (
-    <div>
-      <NavLink className="btn btn-secondary" to="/listofgroups">
-        Szukaj grupy
-      </NavLink>
-      <NavLink className="btn btn-secondary" to="/addgroup">
-        Grupa szuka studenta
-      </NavLink>
-      <Routes>
-        <Route path="/listofgroups" element={<ListOfGroup />} />
-        <Route path="/addgroup" element={<AddGroup />} />
-      </Routes>
-    </div>
-  );
+class Group extends React.Component{
+  render(){
+    return (
+      <Container>
+      <div className="m-3">
+        <Card className="text-center">
+          <Card.Header>
+            {this.props.group.subject}
+          </Card.Header>
+          <Card.Body>
+            <Card.Title>{this.props.group.name}</Card.Title>
+            <Card.Text>{this.props.group.description}</Card.Text>
+          </Card.Body>
+          <Card.Footer className="text-muted">
+            {this.props.group.members.map((val) => {
+              return <>{val.studentName} - {val.whatStudentTo}, </>;
+            })}
+          </Card.Footer>
+        </Card>
+      </div>
+    </Container>
+    );
+  }
 };
 
 export default Group;

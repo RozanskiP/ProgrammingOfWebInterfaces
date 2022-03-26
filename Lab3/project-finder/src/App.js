@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
 import Header from "./components/Header";
 import React, { useState } from "react";
@@ -9,8 +9,12 @@ import AddStudent from "./Student/AddStudent";
 import ListOfGroups from "./Group/ListOfGroups";
 import AddGroup from "./Group/AddGroup";
 import temporaryDataStudents from "./Student/temporaryDataStudents";
+import temporaryDataGroups from "./Group/temporaryDataGroups";
 
 const App = () => {
+  const history = useNavigate();
+
+  // -------------------- STUDENT
   // lista studentow
   const [students, setStudents] = useState(temporaryDataStudents);
 
@@ -18,7 +22,6 @@ const App = () => {
   const [student, setStudent] = useState({});
 
   const handleSetStudentInputsValue = (event) => {
-    console.log(student);
     const { name, value } = event.target;
     setStudent((prevState) => ({
       ...prevState,
@@ -53,31 +56,134 @@ const App = () => {
 
     const updateStudents = [...students, studentToChange];
     setStudents(updateStudents);
-    setStudent("");
+    setStudent({
+      id: "",
+      name: "",
+      email: "",
+      description: "",
+      tags: "",
+      subject: "",
+      group: "",
+    });
+
+    history("/listofstudents", { replace: true });
   };
 
   // checkboxs
-  const [radioCheckbox, setRadioCheckbox] = useState("radioDescription");
+  const [radioCheckboxStudent, setRadioCheckboxStudent] = useState(
+    "radioDescriptionStudent"
+  );
   // checkbox zmiana
-  const handleSetRadioCheckbox = (event) => {
-    setRadioCheckbox(event.target.value);
+  const handleSetRadioCheckboxStudent = (event) => {
+    setRadioCheckboxStudent(event.target.value);
   };
 
-  // filer do inputa
+  // filter do inputa
   const [filter, setFilter] = useState("");
-  // zmiana filta do inputa
+  // zmiana filtra do inputa
   const handleSetFilter = (event) => {
     setFilter(event.target.value);
   };
 
-  // tymczasowa lista do sortowania
+  // tymczasowa lista do sortowania studentow
   const filterListStudents = students.filter((student) => {
-    return radioCheckbox === "radioDescription"
+    return radioCheckboxStudent === "radioDescriptionStudent"
       ? student.description.toLowerCase().includes(filter.toLowerCase())
-      : radioCheckbox === "radioTags"
+      : radioCheckboxStudent === "radioTagsStudent"
       ? student.tags.toString().toLowerCase().includes(filter.toLowerCase())
       : student.subject.toLowerCase().includes(filter.toLowerCase());
   });
+  // -------------------- STUDENT
+
+  // -------------------- GRUPA
+  // lista grup
+  const [groups, setGroups] = useState(temporaryDataGroups);
+
+  // lista checkbox grup
+  const [radioCheckboxGroup, setRadioCheckboxGroup] = useState(
+    "radioDescriptionGroup"
+  );
+
+  const handleSetRadioCheckboxGroup = (event) => {
+    setRadioCheckboxGroup(event.target.value);
+  };
+
+  // filter do inputa grup
+  const [filterGroup, setFilterGroup] = useState("");
+  // zmiana filtra do inputa grup
+  const handleSetFilterGroup = (event) => {
+    setFilterGroup(event.target.value);
+  };
+
+  // tymczasowa lista do sortowania grup
+  const filterListGroup = groups.filter((group) => {
+    return radioCheckboxGroup === "radioDescriptionGroup"
+      ? group.description.toLowerCase().includes(filterGroup.toLowerCase())
+      : group.subject.toLowerCase().includes(filterGroup.toLowerCase());
+  });
+
+  // grupa w inpucie
+  const [group, setGroup] = useState({});
+
+  const handleSetGroupInputsValue = (event) => {
+    const { name, value } = event.target;
+    setGroup((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  // set członka grupy
+  const [member, setMember] = useState({});
+
+  const handleSetMember = (event) => {
+    const {name, value} = event.target;
+    setMember((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }
+
+  // dodanie grupy
+  const handleSetGroups = () => {
+    if (
+      group === "" ||
+      group.name === undefined ||
+      group.description === undefined ||
+      group.subject === undefined
+    ) {
+      return;
+    }
+    let groupToChange = group;
+    groupToChange.id = Number(
+      Math.max.apply(
+        Math,
+        groups.map((value) => {
+          return value.id;
+        })
+      ) + 1
+    );
+    
+    let temporaryGroupOfMembers = []
+    for(let i = 0; i < Object.keys(member).length/3; i++){
+      let memberNew = {
+        id: 1,
+        studentName: member["studentName-" + i],
+        email: member["email-" + i],
+        whatStudentTo: member["whatStudentTo-" + i]
+      }
+      temporaryGroupOfMembers.push(memberNew);
+    }
+    setGroup("");
+    setMember("");
+    groupToChange.members = temporaryGroupOfMembers;
+
+    const updateGroup = [...groups, groupToChange];
+    setGroups(updateGroup);
+
+    history("/listofgroups", { replace: true });
+  };
+  // -------------------- GRUPA
 
   return (
     <div>
@@ -89,8 +195,8 @@ const App = () => {
             path="/listofstudents"
             element={
               <ListOfStudents
-                radioCheckbox={radioCheckbox}
-                handleSetRadioCheckbox={handleSetRadioCheckbox}
+                radioCheckbox={radioCheckboxStudent}
+                handleSetRadioCheckbox={handleSetRadioCheckboxStudent}
                 students={filterListStudents}
                 handleSetFilter={handleSetFilter}
               />
@@ -107,8 +213,30 @@ const App = () => {
               />
             }
           />
-          <Route path="/listofgroups" element={<ListOfGroups />} />
-          <Route path="/addgroup" element={<AddGroup />} />
+          <Route
+            path="/listofgroups"
+            element={
+              <ListOfGroups
+                groups={filterListGroup}
+                radioCheckboxGroup={radioCheckboxGroup}
+                handleSetRadioCheckboxGroup={handleSetRadioCheckboxGroup}
+                handleSetFilterGroup={handleSetFilterGroup}
+              />
+            }
+          />
+          <Route
+            path="/addgroup"
+            element={
+              <AddGroup
+                group={group}
+                handleSetGroups={handleSetGroups}
+                handleSetGroupInputsValue={handleSetGroupInputsValue}
+                key={group.id}
+                member={member}
+                handleSetMember={handleSetMember}
+              />
+            }
+          />
         </Routes>
       </div>
     </div>

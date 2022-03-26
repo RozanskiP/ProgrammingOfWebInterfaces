@@ -55,9 +55,7 @@ const AddStudent = (props) => {
               />
             </div>
             <div className="form-group m-3">
-              <label>
-                Wprowadz dzień i godzinę zajęć
-              </label>
+              <label>Wprowadz dzień i godzinę zajęć</label>
               <input
                 type="text"
                 className="form-control"
@@ -68,7 +66,7 @@ const AddStudent = (props) => {
               />
             </div>
             <div className="form-group m-3">
-              <label >
+              <label>
                 Wprowadz Tagi ułatwiające wyszukiwanie (po przecinku)
               </label>
               <input

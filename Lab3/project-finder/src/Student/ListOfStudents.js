@@ -20,39 +20,33 @@ const ListOfStudents = (props) => {
                 className="form-check-input"
                 type="radio"
                 name="flexRadioDefault"
-                value="radioDescription"
-                checked={props.radioCheckbox === "radioDescription"}
+                value="radioDescriptionStudent"
+                checked={props.radioCheckbox === "radioDescriptionStudent"}
                 onChange={props.handleSetRadioCheckbox}
               />
-              <label className="form-check-label">
-                Opis
-              </label>
+              <label className="form-check-label">Opis</label>
             </div>
             <div className="form-check">
               <input
                 className="form-check-input"
                 type="radio"
                 name="flexRadioDefault"
-                value="radioTags"
-                checked={props.radioCheckbox === "radioTags"}
+                value="radioTagsStudent"
+                checked={props.radioCheckbox === "radioTagsStudent"}
                 onChange={props.handleSetRadioCheckbox}
               />
-              <label className="form-check-label">
-                Tagi
-              </label>
+              <label className="form-check-label">Tagi</label>
             </div>
             <div className="form-check">
               <input
                 className="form-check-input"
                 type="radio"
                 name="flexRadioDefault"
-                value="radioSubject"
-                checked={props.radioCheckbox === "radioSubject"}
+                value="radioSubjectStudent"
+                checked={props.radioCheckbox === "radioSubjectStudent"}
                 onChange={props.handleSetRadioCheckbox}
               />
-              <label className="form-check-label">
-                Przedmiot
-              </label>
+              <label className="form-check-label">Przedmiot</label>
             </div>
           </div>
           <div>
@@ -70,7 +64,7 @@ const ListOfStudents = (props) => {
           </div>
         </Container>
         {props.students.map((val, index) => {
-          return <Student student={val} key={val.id}/>;
+          return <Student student={val} key={val.id} />;
         })}
       </div>
     </div>
