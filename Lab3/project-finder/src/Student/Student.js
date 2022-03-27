@@ -12,6 +12,9 @@ const Student = (props) => {
           <Card.Body>
             <Card.Title>{props.student.name}</Card.Title>
             <Card.Text>{props.student.description}</Card.Text>
+            <Card.Text>
+              <button className="btn btn-success" id={"student-" + props.student.id} onClick={props.handleSendData}>Wyslij zgloszenie</button>
+            </Card.Text>
           </Card.Body>
           <Card.Footer className="text-muted">
             {props.student.tags.map((val) => {

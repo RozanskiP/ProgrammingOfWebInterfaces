@@ -58,7 +58,7 @@ class ListOfGroups extends React.Component {
           </div>
           </Container>
           {this.props.groups.map((val, index) => {
-            return <Group group={val} key={val.id} />;
+            return <Group group={val} key={val.id} handleSendData={this.props.handleSendData} />;
           })}
         </div>
       </div>

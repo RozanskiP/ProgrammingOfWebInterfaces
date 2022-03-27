@@ -64,7 +64,7 @@ const ListOfStudents = (props) => {
           </div>
         </Container>
         {props.students.map((val, index) => {
-          return <Student student={val} key={val.id} />;
+          return <Student student={val} key={val.id} handleSendData={props.handleSendData} />;
         })}
       </div>
     </div>

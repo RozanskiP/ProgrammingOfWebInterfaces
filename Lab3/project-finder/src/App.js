@@ -10,6 +10,7 @@ import ListOfGroups from "./Group/ListOfGroups";
 import AddGroup from "./Group/AddGroup";
 import temporaryDataStudents from "./Student/temporaryDataStudents";
 import temporaryDataGroups from "./Group/temporaryDataGroups";
+import SendMessage from "./components/SendMessage";
 
 const App = () => {
   const history = useNavigate();
@@ -137,12 +138,12 @@ const App = () => {
   const [member, setMember] = useState({});
 
   const handleSetMember = (event) => {
-    const {name, value} = event.target;
+    const { name, value } = event.target;
     setMember((prevState) => ({
       ...prevState,
       [name]: value,
     }));
-  }
+  };
 
   // dodanie grupy
   const handleSetGroups = () => {
@@ -163,15 +164,15 @@ const App = () => {
         })
       ) + 1
     );
-    
-    let temporaryGroupOfMembers = []
-    for(let i = 0; i < Object.keys(member).length/3; i++){
+
+    let temporaryGroupOfMembers = [];
+    for (let i = 0; i < Object.keys(member).length / 3; i++) {
       let memberNew = {
         id: 1,
         studentName: member["studentName-" + i],
         email: member["email-" + i],
-        whatStudentTo: member["whatStudentTo-" + i]
-      }
+        whatStudentTo: member["whatStudentTo-" + i],
+      };
       temporaryGroupOfMembers.push(memberNew);
     }
     setGroup("");
@@ -185,12 +186,34 @@ const App = () => {
   };
   // -------------------- GRUPA
 
+  const [sendData, SetSendData] = useState({})
+
+  const handleSendData = (event) => {
+    let parseData = event.target.id.split("-");
+
+    if(parseData[0] === "student"){
+      SetSendData(students.find(elem => elem.id === Number(parseData[1])));
+    }else{
+      SetSendData(groups.find(elem => elem.id === Number(parseData[1])));
+    }
+
+    history("/sendmessage");
+  };
+
+  const handleBack = () => {
+    history("/");
+  }
+
   return (
     <div>
       <Header />
       <div className="App">
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route
+            path="/sendmessage"
+            element={<SendMessage sendData={sendData} handleBack={handleBack} />}
+          />
           <Route
             path="/listofstudents"
             element={
@@ -199,6 +222,7 @@ const App = () => {
                 handleSetRadioCheckbox={handleSetRadioCheckboxStudent}
                 students={filterListStudents}
                 handleSetFilter={handleSetFilter}
+                handleSendData={handleSendData}
               />
             }
           />
@@ -221,6 +245,7 @@ const App = () => {
                 radioCheckboxGroup={radioCheckboxGroup}
                 handleSetRadioCheckboxGroup={handleSetRadioCheckboxGroup}
                 handleSetFilterGroup={handleSetFilterGroup}
+                handleSendData={handleSendData}
               />
             }
           />
