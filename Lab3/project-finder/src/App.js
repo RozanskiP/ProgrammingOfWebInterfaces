@@ -262,6 +262,7 @@ const App = () => {
               />
             }
           />
+          <Route path="*" element={<p>Incorrect page</p>}/>
         </Routes>
       </div>
     </div>
