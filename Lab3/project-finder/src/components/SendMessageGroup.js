@@ -1,17 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Card } from "react-bootstrap";
+import { useParams, NavLink } from "react-router-dom";
+import { ListOfGroupsContext } from "../state/Contex";
 
-const SendMessage = (props) => {
+const SendMessage = () => {
+  let params = useParams();
+
+  const { groups } = useContext(ListOfGroupsContext);
+  let contactGroup = groups.find((s) => s.id === parseInt(params.idGroup, 10));
+
   return (
     <div>
       <div className="container">
         <div className="row justify-content-md-center">
           <div className="col col-lg-6">
             <Card className="text-center">
-              <Card.Header>{props.sendData.name}</Card.Header>
+              <Card.Header>{contactGroup.name}</Card.Header>
               <Card.Body>
-                <Card.Title>{props.sendData.subject}</Card.Title>
-                <Card.Text>{props.sendData.description}</Card.Text>
+                <Card.Title>{contactGroup.subject}</Card.Title>
+                <Card.Text>{contactGroup.description}</Card.Text>
                 <div className="form-group m-3">
                   <label>Wiadomość:</label>
                   <textarea
@@ -22,9 +29,9 @@ const SendMessage = (props) => {
                 </div>
               </Card.Body>
               <Card.Footer className="text-muted">
-                <button className="btn btn-success" onClick={props.handleBack}>
+                <NavLink className="btn btn-success" to={"/listofgroups"}>
                   Wyslij
-                </button>
+                </NavLink>
               </Card.Footer>
             </Card>
           </div>

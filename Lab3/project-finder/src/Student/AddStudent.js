@@ -1,7 +1,70 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { ListOfStudentsContext } from "../state/Contex";
 
-const AddStudent = (props) => {
+const AddStudent = () => {
+  const { students, setStudents } = useContext(ListOfStudentsContext);
+  const navigate = useNavigate();
+
+  const [name, setName] = useState();
+  const [tags, setTags] = useState();
+  const [email, setEmail] = useState();
+  const [description, setDescription] = useState();
+  const [subject, setSubject] = useState();
+  const [group, setGroup] = useState();
+
+  const handleSetName = (e) => setName(e.target.value);
+  const handleSetTags = (e) => setTags(e.target.value);
+  const handleSetEmail = (e) => setEmail(e.target.value);
+  const handleSetDescription = (e) => setDescription(e.target.value);
+  const handleSetSubject = (e) => setSubject(e.target.value);
+  const handleSetGroup = (e) => setGroup(e.target.value);
+
+  // dodanie studenta
+  const handleSetStudents = () => {
+    if (
+      tags === undefined ||
+      name === undefined ||
+      email === undefined ||
+      description === undefined ||
+      subject === undefined ||
+      group === undefined
+    ) {
+      return;
+    }
+
+    let newStudent = {
+      id: Number(
+        Math.max.apply(
+          Math,
+          students.map((value) => {
+            return value.id;
+          })
+        ) + 1
+      ),
+      name: name,
+      email: email,
+      description: description,
+      subject: subject,
+      group: group,
+    };
+
+    newStudent.tags = tags.split(",");
+
+    const updateStudents = [...students, newStudent];
+    setStudents(updateStudents);
+
+    // clear inputs
+    setName("");
+    setTags("");
+    setEmail("");
+    setDescription("");
+    setSubject("");
+    setGroup("");
+
+    navigate("/listofstudents", { replace: true });
+  };
+
   return (
     <div>
       <NavLink className="btn btn-secondary" to="/listofstudents">
@@ -18,10 +81,9 @@ const AddStudent = (props) => {
               <input
                 type="text"
                 className="form-control"
-                value={props.student.name}
                 name="name"
                 placeholder="Nazwa"
-                onChange={props.handleSetStudentInputsValue}
+                onChange={handleSetName}
               />
               <small id="emailHelp" className="form-text text-muted">
                 Ta nazwa będzie sie pojawiała jako twój identyfikator na stronie
@@ -34,10 +96,9 @@ const AddStudent = (props) => {
                 type="email"
                 className="form-control"
                 name="email"
-                value={props.student.email}
                 aria-describedby="emailHelp"
                 placeholder="Wprowadz Email"
-                onChange={props.handleSetStudentInputsValue}
+                onChange={handleSetEmail}
               />
               <small id="emailHelp" className="form-text text-muted">
                 Nigdy nie udostepnimy swojego emaila innym osoba
@@ -49,9 +110,8 @@ const AddStudent = (props) => {
                 type="text"
                 className="form-control"
                 name="subject"
-                value={props.student.subject}
                 placeholder="Nazwa przedmiotu"
-                onChange={props.handleSetStudentInputsValue}
+                onChange={handleSetSubject}
               />
             </div>
             <div className="form-group m-3">
@@ -60,9 +120,8 @@ const AddStudent = (props) => {
                 type="text"
                 className="form-control"
                 name="group"
-                value={props.student.group}
                 placeholder="Kiedy"
-                onChange={props.handleSetStudentInputsValue}
+                onChange={handleSetGroup}
               />
             </div>
             <div className="form-group m-3">
@@ -73,9 +132,8 @@ const AddStudent = (props) => {
                 type="text"
                 className="form-control"
                 name="tags"
-                value={props.student.tags}
                 placeholder="Tagi"
-                onChange={props.handleSetStudentInputsValue}
+                onChange={handleSetTags}
               />
             </div>
             <div className="form-group m-3">
@@ -83,15 +141,11 @@ const AddStudent = (props) => {
               <textarea
                 className="form-control"
                 name="description"
-                value={props.student.description}
                 rows="3"
-                onChange={props.handleSetStudentInputsValue}
+                onChange={handleSetDescription}
               ></textarea>
             </div>
-            <button
-              className="btn btn-success"
-              onClick={props.handleSetStudent}
-            >
+            <button className="btn btn-success" onClick={handleSetStudents}>
               Dodaj swoje zgłoszenie
             </button>
           </div>

@@ -1,9 +1,37 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Student from "./Student";
 import { Container } from "react-bootstrap";
+import { ListOfStudentsContext } from "../state/Contex";
 
-const ListOfStudents = (props) => {
+const ListOfStudents = () => {
+  const { students } = useContext(ListOfStudentsContext);
+
+  // checkboxs
+  const [radioCheckbox, setRadioCheckbox] = useState("radioDescriptionStudent");
+
+  // checkbox zmiana
+  const handleSetRadioCheckbox = (event) => {
+    setRadioCheckbox(event.target.value);
+  };
+
+  // filter do inputa
+  const [filter, setFilter] = useState("");
+
+  // zmiana filtra do inputa
+  const handleSetFilter = (event) => {
+    setFilter(event.target.value);
+  };
+
+  // lista do sortowania studentow
+  const filterListStudents = students.filter((student) => {
+    return radioCheckbox === "radioDescriptionStudent"
+      ? student.description.toLowerCase().includes(filter.toLowerCase())
+      : radioCheckbox === "radioTagsStudent"
+      ? student.tags.toString().toLowerCase().includes(filter.toLowerCase())
+      : student.subject.toLowerCase().includes(filter.toLowerCase());
+  });
+
   return (
     <div>
       <NavLink className="btn btn-secondary" to="/listofstudents">
@@ -21,8 +49,8 @@ const ListOfStudents = (props) => {
                 type="radio"
                 name="flexRadioDefault"
                 value="radioDescriptionStudent"
-                checked={props.radioCheckbox === "radioDescriptionStudent"}
-                onChange={props.handleSetRadioCheckbox}
+                checked={radioCheckbox === "radioDescriptionStudent"}
+                onChange={handleSetRadioCheckbox}
               />
               <label className="form-check-label">Opis</label>
             </div>
@@ -32,8 +60,8 @@ const ListOfStudents = (props) => {
                 type="radio"
                 name="flexRadioDefault"
                 value="radioTagsStudent"
-                checked={props.radioCheckbox === "radioTagsStudent"}
-                onChange={props.handleSetRadioCheckbox}
+                checked={radioCheckbox === "radioTagsStudent"}
+                onChange={handleSetRadioCheckbox}
               />
               <label className="form-check-label">Tagi</label>
             </div>
@@ -43,8 +71,8 @@ const ListOfStudents = (props) => {
                 type="radio"
                 name="flexRadioDefault"
                 value="radioSubjectStudent"
-                checked={props.radioCheckbox === "radioSubjectStudent"}
-                onChange={props.handleSetRadioCheckbox}
+                checked={radioCheckbox === "radioSubjectStudent"}
+                onChange={handleSetRadioCheckbox}
               />
               <label className="form-check-label">Przedmiot</label>
             </div>
@@ -58,13 +86,13 @@ const ListOfStudents = (props) => {
                 className="form-control"
                 aria-label="Large"
                 aria-describedby="inputGroup-sizing-sm"
-                onChange={props.handleSetFilter}
+                onChange={handleSetFilter}
               />
             </div>
           </div>
         </Container>
-        {props.students.map((val, index) => {
-          return <Student student={val} key={val.id} handleSendData={props.handleSendData} />;
+        {filterListStudents.map((val, index) => {
+          return <Student student={val} key={index} />;
         })}
       </div>
     </div>

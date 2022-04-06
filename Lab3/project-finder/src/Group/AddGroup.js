@@ -1,20 +1,86 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import ModalInput from "../components/ModalInput";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { ListOfGroupsContext } from "../state/Contex";
 
-const AddGroup = (props) => {
-  // liczba członków grupy
-  const [valueOfMembers, setValueOfMembers] = useState(1);
+const AddGroup = () => {
+  const { groups, setGroups } = useContext(ListOfGroupsContext);
+  const navigate = useNavigate();
 
-  const handleSetValueOfMembers = (event) => {
-    setValueOfMembers(event.target.value);
+  const [name, setName] = useState();
+  const [description, setDescription] = useState();
+  const [subject, setSubject] = useState();
+  const [numberOfMember, setNumberOfMember] = useState(1);
+
+  const handleSetName = (e) => setName(e.target.value);
+  const handleSetDescription = (e) => setDescription(e.target.value);
+  const handleSetSubject = (e) => setSubject(e.target.value);
+  const handleSetNumberOfMember = (e) => setNumberOfMember(e.target.value);
+
+  const handleSetGroups = () => {
+    if (
+      name === undefined ||
+      description === undefined ||
+      subject === undefined
+    ) {
+      return;
+    }
+
+    let groupToChange = {
+      id: Number(
+        Math.max.apply(
+          Math,
+          groups.map((value) => {
+            return value.id;
+          })
+        ) + 1
+      ),
+      name: name,
+      description: description,
+      subject: subject,
+    };
+
+    let temporaryGroupOfMembers = [];
+    for (let i = 0; i < Object.keys(member).length / 3; i++) {
+      let memberNew = {
+        id: 1,
+        studentName: member["studentName-" + i],
+        email: member["email-" + i],
+        whatStudentTo: member["whatStudentTo-" + i],
+      };
+      temporaryGroupOfMembers.push(memberNew);
+    }
+
+    groupToChange.members = temporaryGroupOfMembers;
+
+    const updateGroup = [...groups, groupToChange];
+    setGroups(updateGroup);
+
+    // clear inputs
+    setName("");
+    setDescription("");
+    setSubject("");
+    setMember("");
+
+    navigate("/listofgroups", { replace: true });
+  };
+
+  // set members of group
+  const [member, setMember] = useState({});
+
+  const handleSetMember = (event) => {
+    const { name, value } = event.target;
+    setMember((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
     setShow(false);
-    props.handleSetGroups();
+    handleSetGroups();
   };
 
   const handleShow = () => {
@@ -30,12 +96,12 @@ const AddGroup = (props) => {
         Grupa szuka studenta
       </NavLink>
       <ModalInput
-        valueOfMembers={valueOfMembers}
+        valueOfMembers={numberOfMember}
         show={show}
         handleClose={handleClose}
         handleShow={handleShow}
-        member={props.member}
-        handleSetMember={props.handleSetMember}
+        member={member}
+        handleSetMember={handleSetMember}
       />
       <div className="container">
         <div className="row justify-content-md-center">
@@ -45,10 +111,9 @@ const AddGroup = (props) => {
               <input
                 type="text"
                 className="form-control"
-                value={props.group.name}
                 name="name"
                 placeholder="Nazwa"
-                onChange={props.handleSetGroupInputsValue}
+                onChange={handleSetName}
               />
               <small id="emailHelp" className="form-text text-muted">
                 Ta nazwa będzie sie pojawiała jako twój identyfikator grupy na
@@ -62,10 +127,9 @@ const AddGroup = (props) => {
                 min="0"
                 step="1"
                 className="form-control"
-                value={valueOfMembers}
-                name="name"
-                placeholder="Nazwa"
-                onChange={handleSetValueOfMembers}
+                name="numberOfMembers"
+                placeholder="Liczba osob"
+                onChange={handleSetNumberOfMember}
               />
             </div>
             <div className="form-group m-3">
@@ -73,9 +137,8 @@ const AddGroup = (props) => {
               <textarea
                 className="form-control"
                 name="description"
-                value={props.group.description}
                 rows="3"
-                onChange={props.handleSetGroupInputsValue}
+                onChange={handleSetDescription}
               ></textarea>
             </div>
             <div className="form-group m-3">
@@ -84,9 +147,8 @@ const AddGroup = (props) => {
                 type="text"
                 className="form-control"
                 name="subject"
-                value={props.group.subject}
                 placeholder="Nazwa przedmiotu"
-                onChange={props.handleSetGroupInputsValue}
+                onChange={handleSetSubject}
               />
             </div>
             <button className="btn btn-success" onClick={handleShow}>
