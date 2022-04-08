@@ -1,12 +1,19 @@
 import React from "react";
 import { Card, Container } from "react-bootstrap";
 import { useNavigate, NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addStudent } from "../store/cart";
 
 const Student = (props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClickContact = () => {
     navigate(`/listofstudents/${props.student.id}/contact`);
+  };
+
+  const handleObserve = () => {
+    dispatch(addStudent(props.student));
   };
 
   return (
@@ -26,11 +33,17 @@ const Student = (props) => {
             </Card.Text>
             <Card.Text>
               <button
-                className="btn btn-success"
+                className="btn btn-success mx-1"
                 id={"student-" + props.student.id}
                 onClick={handleClickContact}
               >
                 Wyslij zgloszenie
+              </button>
+              <button
+                className="btn btn-light border border-dark mx-1"
+                onClick={handleObserve}
+              >
+                Obserwuj
               </button>
             </Card.Text>
           </Card.Body>

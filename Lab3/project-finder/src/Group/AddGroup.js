@@ -89,10 +89,10 @@ const AddGroup = () => {
 
   return (
     <div>
-      <NavLink className="btn btn-secondary" to="/listofgroups">
+      <NavLink className="btn btn-secondary m-2" to="/listofgroups">
         Szukaj grupy
       </NavLink>
-      <NavLink className="btn btn-secondary" to="/addgroup">
+      <NavLink className="btn btn-secondary m-2" to="/addgroup">
         Grupa szuka studenta
       </NavLink>
       <ModalInput

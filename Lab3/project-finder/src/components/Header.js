@@ -6,6 +6,7 @@ import Container from "react-bootstrap/Container";
 import { LoggedUser } from "../state/Contex";
 import UnloggedApp from "./UnloggedApp";
 import LoggedApp from "./LoggedApp";
+import { FaShoppingCart } from "react-icons/fa";
 
 const Header = () => {
   const { loggedUser } = useContext(LoggedUser);
@@ -31,6 +32,14 @@ const Header = () => {
               Student szuka grupy
             </NavLink>
           </Nav>
+          {loggedUser.uuid !== 0 ? (<Nav>
+            <NavLink
+              className="btn btn-success btn-lg mx-2"
+              to="/cartcomp"
+            >
+              <FaShoppingCart style={{color: 'white'}} />
+            </NavLink>
+          </Nav>) : null}
           <Nav>
             {loggedUser.uuid === 0 ? (
               <UnloggedApp />

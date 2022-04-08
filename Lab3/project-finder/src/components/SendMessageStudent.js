@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { Card } from "react-bootstrap";
 import { NavLink, useParams } from "react-router-dom";
 import { ListOfStudentsContext } from "../state/Contex";
@@ -10,6 +10,11 @@ const SendMessage = () => {
   let contactStudent = students.find(
     (s) => s.id === parseInt(params.idStudent, 10)
   );
+
+  const refAreaInput = useRef(null);
+  useEffect(() => {
+    refAreaInput.current?.focus();
+  });
 
   return (
     <div>
@@ -24,10 +29,11 @@ const SendMessage = () => {
                 <div className="form-group m-3">
                   <label>Wiadomość:</label>
                   <textarea
+                    ref={refAreaInput}
                     className="form-control"
                     name="description"
                     rows="3"
-                  ></textarea>
+                  />
                 </div>
               </Card.Body>
               <Card.Footer className="text-muted">

@@ -31,15 +31,15 @@ const ListOfGroups = () => {
 
   return (
     <div>
-      <NavLink className="btn btn-secondary" to="/listofgroups">
+      <NavLink className="btn btn-secondary m-2" to="/listofgroups">
         Szukaj grupy
       </NavLink>
-      <NavLink className="btn btn-secondary" to="/addgroup">
+      <NavLink className="btn btn-secondary m-2" to="/addgroup">
         Grupa szuka studenta
       </NavLink>
       <div>
         <Container>
-          <div className="d-flex justify-content-around m-4">
+          <div className="d-flex justify-content-around m-1">
             <div className="form-check">
               <input
                 className="form-check-input"

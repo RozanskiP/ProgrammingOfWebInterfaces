@@ -1,12 +1,16 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoggedUser } from "../state/Contex";
+import { useDispatch } from "react-redux";
+import { refresh } from "../store/cart";
 
 const LoggedApp = (props) => {
   const navigate = useNavigate();
   const { logout } = useContext(LoggedUser);
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
+    dispatch(refresh());
     logout();
     navigate("/", { replace: true });
   };

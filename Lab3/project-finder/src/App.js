@@ -13,6 +13,7 @@ import SendMessageStudent from "./components/SendMessageStudent";
 import SendMessageGroup from "./components/SendMessageGroup";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
+import CartComp from "./components/CartComp";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
           />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/cartcomp" element={<CartComp />} />
           <Route path="*" element={<p>Incorrect page</p>} />
         </Routes>
       </div>

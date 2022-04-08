@@ -47,6 +47,7 @@ const AddStudent = () => {
       description: description,
       subject: subject,
       group: group,
+      image: "",
     };
 
     newStudent.tags = tags.split(",");
@@ -67,10 +68,10 @@ const AddStudent = () => {
 
   return (
     <div>
-      <NavLink className="btn btn-secondary" to="/listofstudents">
+      <NavLink className="btn btn-secondary m-2" to="/listofstudents">
         Szukaj studenta
       </NavLink>
-      <NavLink className="btn btn-secondary" to="/addstudent">
+      <NavLink className="btn btn-secondary m-2" to="/addstudent">
         Dodaj nowego studenta
       </NavLink>
       <div className="container">

@@ -1,5 +1,7 @@
 import React, { useState, createContext, useEffect } from "react";
 import axios from "axios";
+import { Provider } from "react-redux";
+import store from "../store/store";
 
 // https://stackoverflow.com/questions/57144498/how-to-use-react-context-with-usestate-hook-to-share-state-from-different-compon
 export const ListOfStudentsContext = createContext();
@@ -40,6 +42,43 @@ export const ListOfGroupsProvider = ({ children }) => {
   );
 };
 
+// https://usehooks.com/useLocalStorage/
+const useLocalStorage = (key, init) => {
+  const [saveLoggedUser, setSaveLoggedUser] = useState(() => {
+    if (typeof window === "undefined") {
+      return init;
+    } else {
+      try {
+        const item = window.localStorage.getItem(key);
+
+        if (item) {
+          return JSON.parse(item);
+        } else {
+          return init;
+        }
+      } catch (e) {
+        console.log(e);
+        return init;
+      }
+    }
+  });
+
+  const setStorageWithLoggedUser = (value) => {
+    try {
+      const toStore = value instanceof Function ? value(saveLoggedUser) : value;
+
+      setSaveLoggedUser(toStore);
+
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem(key, JSON.stringify(toStore));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  return [saveLoggedUser, setStorageWithLoggedUser];
+};
+
 export const UsersContext = createContext();
 export const LoggedUser = createContext();
 
@@ -60,7 +99,10 @@ export const UsersProvider = ({ children }) => {
     login: "",
     password: "",
   };
-  const [loggedUser, setLoggedUser] = useState(defaultUserData);
+  const [loggedUser, setLoggedUser] = useLocalStorage(
+    "account",
+    defaultUserData
+  );
 
   const login = (uuid) => {
     let loginUser = users.find((user) => user.uuid === uuid);
@@ -74,7 +116,7 @@ export const UsersProvider = ({ children }) => {
   return (
     <UsersContext.Provider value={{ users, setUsers }}>
       <LoggedUser.Provider value={{ loggedUser, login, logout }}>
-        {children}
+        <Provider store={store}>{children}</Provider>
       </LoggedUser.Provider>
     </UsersContext.Provider>
   );

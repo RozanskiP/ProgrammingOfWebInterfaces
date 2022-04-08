@@ -1,12 +1,19 @@
 import React from "react";
 import { Card, Container } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { addGroup } from "../store/cart";
 
 const Group = (props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClickContact = () => {
     navigate(`/listofgroups/${props.group.id}/contact`);
+  };
+
+  const handleObserve = () => {
+    dispatch(addGroup(props.group));
   };
 
   return (
@@ -23,6 +30,12 @@ const Group = (props) => {
               onClick={handleClickContact}
             >
               Wyslij zgloszenie
+            </button>
+            <button
+              className="btn btn-light border border-dark mx-1"
+              onClick={handleObserve}
+            >
+              Obserwuj
             </button>
           </Card.Body>
           <Card.Footer className="text-muted">

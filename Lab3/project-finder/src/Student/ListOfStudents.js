@@ -47,15 +47,15 @@ const ListOfStudents = () => {
 
   return (
     <div>
-      <NavLink className="btn btn-secondary" to="/listofstudents">
+      <NavLink className="btn btn-secondary m-2" to="/listofstudents">
         Szukaj studenta
       </NavLink>
-      <NavLink className="btn btn-secondary" to="/addstudent">
+      <NavLink className="btn btn-secondary m-2" to="/addstudent">
         Dodaj nowego studenta
       </NavLink>
       <div>
         <Container>
-          <div className="d-flex justify-content-around m-4">
+          <div className="d-flex justify-content-around m-1">
             <div className="form-check">
               <input
                 className="form-check-input"
