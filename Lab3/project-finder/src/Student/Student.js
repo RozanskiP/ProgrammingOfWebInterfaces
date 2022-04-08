@@ -1,13 +1,13 @@
 import React from "react";
 import { Card, Container } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 const Student = (props) => {
   const navigate = useNavigate();
 
   const handleClickContact = () => {
     navigate(`/listofstudents/${props.student.id}/contact`);
-  }
+  };
 
   return (
     <Container>
@@ -19,6 +19,11 @@ const Student = (props) => {
           <Card.Body>
             <Card.Title>{props.student.name}</Card.Title>
             <Card.Text>{props.student.description}</Card.Text>
+            <Card.Text>
+              <NavLink to={`/listofstudents/${props.student.id}`}>
+                <img src={props.student.image} alt="not working :(" />
+              </NavLink>
+            </Card.Text>
             <Card.Text>
               <button
                 className="btn btn-success"

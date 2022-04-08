@@ -1,11 +1,24 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Student from "./Student";
 import { Container } from "react-bootstrap";
 import { ListOfStudentsContext } from "../state/Contex";
 
 const ListOfStudents = () => {
-  const { students } = useContext(ListOfStudentsContext);
+  const { students, setStudents } = useContext(ListOfStudentsContext);
+
+  useEffect(() => {
+    setStudents(
+      students.map((elem) => {
+        if(elem.image === ""){
+          fetch("https://picsum.photos/210/300").then((img) => {
+            elem.image = img.url;
+          });
+        }
+        return elem;
+      })
+    );
+  }, []);
 
   // checkboxs
   const [radioCheckbox, setRadioCheckbox] = useState("radioDescriptionStudent");

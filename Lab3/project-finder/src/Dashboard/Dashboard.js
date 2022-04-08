@@ -5,7 +5,7 @@ const Dashboard = () => {
     <div className="container">
       <div className="row justify-content-md-center">
         <div className="col col-lg-6">
-          <div className="header-first-page">
+          <div className="header-first-page my-5">
             Jeśli szukasz grupy zajęciowej lub jesteś grupa, która szuka
             studentato jesteśmy stroną dla Ciebie
           </div>
