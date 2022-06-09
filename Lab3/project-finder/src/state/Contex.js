@@ -109,13 +109,23 @@ export const UsersProvider = ({ children }) => {
     setLoggedUser(loginUser);
   };
 
+  const loginWithFirebase = (name, email) => {
+    const defaultUserData = {
+      uuid: 1,
+      email: name,
+      login: email,
+      password: "",
+    };
+    setLoggedUser(defaultUserData);
+  }
+
   const logout = () => {
     setLoggedUser(defaultUserData);
   };
 
   return (
     <UsersContext.Provider value={{ users, setUsers }}>
-      <LoggedUser.Provider value={{ loggedUser, login, logout }}>
+      <LoggedUser.Provider value={{ loggedUser, login, logout, loginWithFirebase }}>
         <Provider store={store}>{children}</Provider>
       </LoggedUser.Provider>
     </UsersContext.Provider>

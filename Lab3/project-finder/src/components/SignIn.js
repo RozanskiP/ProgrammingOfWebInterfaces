@@ -1,14 +1,23 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoggedUser, UsersContext } from "../state/Contex";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  GithubAuthProvider,
+  signInWithRedirect,
+} from "firebase/auth";
+import { auth } from "../firebase/init";
 
 const SignIn = () => {
   const { users } = useContext(UsersContext);
-  const { login } = useContext(LoggedUser);
+  const { login, loginWithFirebase } = useContext(LoggedUser);
   const navigate = useNavigate();
 
   const [loginText, setLoginText] = useState();
   const [password, setPassword] = useState();
+  const googleProvider = new GoogleAuthProvider();
+  const githubProvider = new GithubAuthProvider();
 
   const [error, setError] = useState("");
 
@@ -29,11 +38,32 @@ const SignIn = () => {
     }
   };
 
+  const handleLoginWithGoogle = async () => {
+    try {
+      const response = await signInWithPopup(auth, googleProvider);
+      loginWithFirebase(response.user.displayName, response.user.email);
+    } catch (error) {
+      setError("Incorrect login or password!");
+      console.log(error);
+    }
+  };
+
+  const handleLoginWithGitHub = async () => {
+    try {
+      await signInWithRedirect(auth, githubProvider).then((resp) => {
+        loginWithFirebase(resp.user.displayName, resp.user.email);
+      });
+    } catch (error) {
+      setError("Incorrect login or password!");
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <div className="container">
         <div className="row justify-content-md-center">
-          <div className="col col-lg-6">
+          <div className="col col-lg-8">
             <div className="form-group m-3">
               <label>Login</label>
               <input
@@ -55,8 +85,20 @@ const SignIn = () => {
               />
               <small className="text-danger">{error}</small>
             </div>
-            <button className="btn btn-success" onClick={handleLogin}>
+            <button className="btn btn-success m-3" onClick={handleLogin}>
               Sign In
+            </button>
+            <button
+              className="btn btn-success m-3"
+              onClick={handleLoginWithGitHub}
+            >
+              Sign In with GitHub
+            </button>
+            <button
+              className="btn btn-success m-3"
+              onClick={handleLoginWithGoogle}
+            >
+              Sign In with Google
             </button>
           </div>
         </div>
