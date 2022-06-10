@@ -6,6 +6,7 @@ import {
   signInWithPopup,
   GithubAuthProvider,
   signInWithRedirect,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../firebase/init";
 
@@ -16,12 +17,14 @@ const SignIn = () => {
 
   const [loginText, setLoginText] = useState();
   const [password, setPassword] = useState();
+  const [email, setEmail] = useState();
   const googleProvider = new GoogleAuthProvider();
   const githubProvider = new GithubAuthProvider();
 
   const [error, setError] = useState("");
 
   const handleSetLogin = (e) => setLoginText(e.target.value);
+  const handleSetEmail = (e) => setEmail(e.target.value);
   const handleSetPassword = (e) => setPassword(e.target.value);
 
   const handleLogin = () => {
@@ -59,11 +62,18 @@ const SignIn = () => {
     }
   };
 
+  const handleLoginWithFirebase = async () => {
+    signInWithEmailAndPassword(auth, email, password).then(credential => {
+      loginWithFirebase(credential.user.displayName, credential.user.email);
+      console.log(credential.user);
+    })
+  };
+
   return (
     <div>
       <div className="container">
         <div className="row justify-content-md-center">
-          <div className="col col-lg-8">
+          <div className="col col-lg-6">
             <div className="form-group m-3">
               <label>Login</label>
               <input
@@ -72,6 +82,16 @@ const SignIn = () => {
                 name="login"
                 placeholder="Login"
                 onChange={handleSetLogin}
+              />
+            </div>
+            <div className="form-group m-3">
+              <label>Email address</label>
+              <input
+                type="email"
+                className="form-control"
+                name="email"
+                placeholder="Email"
+                onChange={handleSetEmail}
               />
             </div>
             <div className="form-group m-3">
@@ -85,20 +105,26 @@ const SignIn = () => {
               />
               <small className="text-danger">{error}</small>
             </div>
-            <button className="btn btn-success m-3" onClick={handleLogin}>
-              Sign In
+            <button className="btn btn-success m-2" onClick={handleLogin}>
+              Sign In with localStorage
             </button>
             <button
-              className="btn btn-success m-3"
+              className="btn btn-success m-2"
               onClick={handleLoginWithGitHub}
             >
               Sign In with GitHub
             </button>
             <button
-              className="btn btn-success m-3"
+              className="btn btn-success m-2"
               onClick={handleLoginWithGoogle}
             >
               Sign In with Google
+            </button>
+            <button
+              className="btn btn-success m-2"
+              onClick={handleLoginWithFirebase}
+            >
+              Sign In with Firebase
             </button>
           </div>
         </div>

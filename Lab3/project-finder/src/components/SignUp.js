@@ -1,11 +1,14 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoggedUser, UsersContext } from "../state/Contex";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../firebase/init";
 
 const SignUp = () => {
   const { users, setUsers } = useContext(UsersContext);
   const { login } = useContext(LoggedUser);
   const navigate = useNavigate();
+  const { loginWithFirebase } = useContext(LoggedUser);
 
   const [email, setEmail] = useState();
   const [loginText, setLoginText] = useState();
@@ -48,6 +51,17 @@ const SignUp = () => {
     navigate("/", { replace: true });
   };
 
+  const handleSignUpWithFirebase = () => {
+    createUserWithEmailAndPassword(auth, email, password).then((credential) => {
+      loginWithFirebase(loginText, credential.user.email);
+      updateProfile(auth.currentUser, {
+        displayName: loginText
+      }).then(changedUserName => {
+        console.log("Name changed");
+      })
+    });
+  };
+
   return (
     <div>
       <div className="container">
@@ -83,8 +97,14 @@ const SignUp = () => {
                 onChange={handleSetPassword}
               />
             </div>
-            <button className="btn btn-success" onClick={handleSetUsers}>
+            <button className="btn btn-success m-3" onClick={handleSetUsers}>
               Sign Up
+            </button>
+            <button
+              className="btn btn-success m-3"
+              onClick={handleSignUpWithFirebase}
+            >
+              Sign Up with Firebase
             </button>
           </div>
         </div>
